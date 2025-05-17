@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class Exploder : MonoBehaviour
+public class Explode : MonoBehaviour
 {
     [SerializeField] private float _explosionRadius = 40f;
     [SerializeField] private float _explosionForce = 100f;
     [SerializeField] private float _upwardsModifier = 0.4f;
 
-    public void Explode()
+    public void Exploded()
     {
         Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _explosionRadius);
         

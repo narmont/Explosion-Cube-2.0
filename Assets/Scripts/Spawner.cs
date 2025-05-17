@@ -5,11 +5,6 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private Transform _pointPosition;
     [SerializeField] private Cube _prefabCube;
-    [SerializeField] private Player _player;
-
-    private int _minRandomValue = 2;
-    private int _maxRandomValue = 6;
-    private int _indexForDerciseChanceSpleet = 2;
 
     private void Start()
     {
@@ -29,14 +24,16 @@ public class Spawner : MonoBehaviour
 
     private void CreateRedusedCubes(Cube newCube)
     {
+        int minRandomValue = 2;
+        int maxRandomValue = 6;
+        int indexForDerciseChanceSpleet = 2;
+
         newCube.Split -= CreateRedusedCubes;
 
-        int countCubes = Random.Range(_minRandomValue, _maxRandomValue);
-
-        List<Cube> cubes = new List<Cube>();
+        int countCubes = Random.Range(minRandomValue, maxRandomValue + 1);
 
         Vector3 scale = newCube.transform.localScale / 2;
-        float chanceToSplite = newCube.ChanceToSplit / _indexForDerciseChanceSpleet;
+        float chanceToSplite = newCube.ChanceToSplit / indexForDerciseChanceSpleet;
 
         Debug.Log(chanceToSplite);
 
@@ -44,7 +41,6 @@ public class Spawner : MonoBehaviour
         {
             newCube = CreateCube(newCube, newCube.Position);
             newCube.Init(newCube, scale, chanceToSplite);
-            cubes.Add(newCube);
         }
     }
 }

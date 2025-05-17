@@ -4,16 +4,11 @@ using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Renderer))]
-[RequireComponent(typeof(Explode))]
+[RequireComponent(typeof(Exploder))]
 
 public class Cube : MonoBehaviour
 {
-    [SerializeField] private Explode _explode;
-    [SerializeField] private Player _player;
-
-    private Rigidbody _rigidbody;
-    private float _maximumChance = 100f;
-    private float _minimumChance = 0f;
+    [SerializeField] private Exploder _explode;
 
     public event Action<Cube> Split;
     public Vector3 Position => transform.position;
@@ -21,8 +16,7 @@ public class Cube : MonoBehaviour
 
     private void Awake()
     {
-        _explode = GetComponent<Explode>();
-        _rigidbody = GetComponent<Rigidbody>();
+        _explode = GetComponent<Exploder>();
         GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
@@ -35,7 +29,9 @@ public class Cube : MonoBehaviour
 
     public void Explode()
     {
-        float chance = Random.Range(_minimumChance, _maximumChance);
+        float maximumChance = 100f;
+        float minimumChance = 0f;
+        float chance = Random.Range(minimumChance, maximumChance + 1);
 
         if (chance <= ChanceToSplit)
         {
@@ -43,7 +39,7 @@ public class Cube : MonoBehaviour
         }
         else
         {
-            _explode.Exploded();
+            _explode.Explode();
         }    
     }
 }
