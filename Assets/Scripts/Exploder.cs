@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Explode : MonoBehaviour
+public class Exploder : MonoBehaviour
 {
     [SerializeField] private float _explosionRadius = 40f;
     [SerializeField] private float _explosionForce = 100f;
@@ -31,10 +31,12 @@ public class Explode : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        float DecriseExplosionRadius = 2f;
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _explosionRadius);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _explosionRadius / 2f);
+        Gizmos.DrawWireSphere(transform.position, _explosionRadius / DecriseExplosionRadius);
     }
 }

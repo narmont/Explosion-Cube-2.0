@@ -10,7 +10,7 @@ public class Cube : MonoBehaviour
 {
     [SerializeField] private Exploder _explode;
 
-    public event Action<Cube> Split;
+    public event Action<Cube> Splited;
     public Vector3 Position => transform.position;
     public float ChanceToSplit { get; private set; } = 100;
 
@@ -20,9 +20,9 @@ public class Cube : MonoBehaviour
         GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
-    public void Init(Cube cube, Vector3 scale, float chance)
+    public void Init(Vector3 position, Vector3 scale, float chance)
     {
-        transform.position = cube.transform.position;
+        transform.position = position;
         transform.localScale = scale;
         ChanceToSplit = chance; 
     }
@@ -35,11 +35,11 @@ public class Cube : MonoBehaviour
 
         if (chance <= ChanceToSplit)
         {
-            Split?.Invoke(this);
+            Splited?.Invoke(this);
         }
         else
         {
-            _explode.Explode();
+            _explode.Exploded();
         }    
     }
 }

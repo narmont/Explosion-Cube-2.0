@@ -17,7 +17,7 @@ public class Spawner : MonoBehaviour
     {
         Cube newCube = Instantiate(cube, position, Quaternion.identity);
 
-        newCube.Split += CreateRedusedCubes;
+        newCube.Splited += CreateRedusedCubes;
 
         return newCube;
     }
@@ -26,21 +26,22 @@ public class Spawner : MonoBehaviour
     {
         int minRandomValue = 2;
         int maxRandomValue = 6;
-        int indexForDerciseChanceSpleet = 2;
+        int indexForDecriseScale = 2;
+        int indexForDecriseChanceSpleet = 2;
 
-        newCube.Split -= CreateRedusedCubes;
+        newCube.Splited -= CreateRedusedCubes;
 
         int countCubes = Random.Range(minRandomValue, maxRandomValue + 1);
 
-        Vector3 scale = newCube.transform.localScale / 2;
-        float chanceToSplite = newCube.ChanceToSplit / indexForDerciseChanceSpleet;
+        Vector3 scale = newCube.transform.localScale / indexForDecriseScale;
+        float chanceToSplite = newCube.ChanceToSplit / indexForDecriseChanceSpleet;
 
         Debug.Log(chanceToSplite);
 
         for (int i = 0; i < countCubes; i++)
         {
             newCube = CreateCube(newCube, newCube.Position);
-            newCube.Init(newCube, scale, chanceToSplite);
+            newCube.Init(newCube.transform.position, scale, chanceToSplite);
         }
     }
 }

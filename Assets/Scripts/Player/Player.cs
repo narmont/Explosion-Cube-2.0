@@ -37,12 +37,15 @@ public class Player : MonoBehaviour
 
     private void DestroyTargetCube(RaycastHit targetHit)
     {
+       // Exploder explode = GetComponent<Exploder>();
+
         var cube = targetHit.collider.gameObject.GetComponent<Cube>();      
 
         if (cube)
         {
             Destroy(targetHit.collider.gameObject);
 
+           // explode.Exploded();
             cube.Explode();
         }
     }
