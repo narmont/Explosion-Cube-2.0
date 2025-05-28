@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _pointer;
     [SerializeField] private Camera _mainCamera;
 
+    public event Action<Cube> CubeDestroed;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -37,7 +39,6 @@ public class Player : MonoBehaviour
 
     private void DestroyTargetCube(RaycastHit targetHit)
     {
-       // Exploder explode = GetComponent<Exploder>();
 
         var cube = targetHit.collider.gameObject.GetComponent<Cube>();      
 
@@ -45,7 +46,6 @@ public class Player : MonoBehaviour
         {
             Destroy(targetHit.collider.gameObject);
 
-           // explode.Exploded();
             cube.Explode();
         }
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(CubeColorChanger))]
 [RequireComponent(typeof(Exploder))]
 
 public class Cube : MonoBehaviour
@@ -17,14 +17,13 @@ public class Cube : MonoBehaviour
     private void Awake()
     {
         _explode = GetComponent<Exploder>();
-        GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
     public void Init(Vector3 position, Vector3 scale, float chance)
     {
         transform.position = position;
         transform.localScale = scale;
-        ChanceToSplit = chance; 
+        ChanceToSplit = chance;
     }
 
     public void Explode()
@@ -40,6 +39,6 @@ public class Cube : MonoBehaviour
         else
         {
             _explode.Exploded();
-        }    
+        }
     }
 }
