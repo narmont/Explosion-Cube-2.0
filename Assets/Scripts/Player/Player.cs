@@ -1,13 +1,12 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private Transform _pointer;
     [SerializeField] private Camera _mainCamera;
 
-    public event Action<Cube> CubeDestroed;
+    public event Action<Cube> OnCubeClicked;
 
     private void Awake()
     {
@@ -16,37 +15,24 @@ public class Player : MonoBehaviour
 
     private void LateUpdate()
     {
-        Guide();
+        HandleCubeClickInput();
     }
 
-    private void Guide()
+    private void HandleCubeClickInput()
     {
-        RaycastHit targetHit;
+        int indexMouseButtonDown = 0;
         Vector3 mousePos = Input.mousePosition;
-        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(_mainCamera.transform.position, mousePos, Color.yellow);
+        Ray ray = _mainCamera.ScreenPointToRay(mousePos);
+        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.yellow, 0.1f);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(indexMouseButtonDown))
         {
-            if (Physics.Raycast(ray, out targetHit))
+            if (Physics.Raycast(ray, out RaycastHit targetHit) && targetHit.collider.TryGetComponent(out Cube cube))
             {
                 _pointer.position = targetHit.point;
 
-                DestroyTargetCube(targetHit);
+                OnCubeClicked?.Invoke(cube);
             }
-        }
-    }
-
-    private void DestroyTargetCube(RaycastHit targetHit)
-    {
-
-        var cube = targetHit.collider.gameObject.GetComponent<Cube>();      
-
-        if (cube)
-        {
-            Destroy(targetHit.collider.gameObject);
-
-            cube.Explode();
         }
     }
 }

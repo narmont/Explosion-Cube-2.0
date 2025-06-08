@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Exploder : MonoBehaviour
@@ -6,7 +7,7 @@ public class Exploder : MonoBehaviour
     [SerializeField] private float _explosionForce = 100f;
     [SerializeField] private float _upwardsModifier = 0.4f;
 
-    public void Exploded()
+    public void ExplodedSplit()
     {
         Collider[] overlappedColliders = Physics.OverlapSphere(transform.position, _explosionRadius);
         
