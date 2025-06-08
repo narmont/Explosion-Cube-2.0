@@ -20,21 +20,13 @@ public class CubeController : MonoBehaviour
         Vector3 scale = cube.transform.localScale / indexForDecriseScale;
         float chanceToSplite = cube.ChanceToSplit / indexForDecriseChanceSpleet;
 
-        Debug.Log(chanceToSplite);
-
         if (chance <= chanceToSplite)
         {
-            cube.Init(cube.transform.position, scale, chanceToSplite);
-            Debug.Log(chanceToSplite);
+            _spawner.CreateRedusedCubes(cube, scale, chanceToSplite);
+
             _exploder.ExplodedSplit();
-
-            Destroy(cube.gameObject);
-
-            _spawner.CreateRedusedCubes(cube);
         }
-        else
-        {
-            Destroy(cube.gameObject);
-        }
+        
+        Destroy(cube.gameObject);
     }
 }

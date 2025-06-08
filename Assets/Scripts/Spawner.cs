@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class Spawner : MonoBehaviour
         return newCube;
     }
 
-    public void CreateRedusedCubes(Cube cube)
+    public void CreateRedusedCubes(Cube cube, Vector3 scale, float chanceToSplite)
     {
         int minRandomValue = 2;
         int maxRandomValue = 6;
@@ -29,6 +30,7 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < countCubes; i++)
         {
             cube = CreateCube(cube, cube.Position);
+            cube.Init(cube.transform.position, scale, chanceToSplite);
         }
     }
 }
