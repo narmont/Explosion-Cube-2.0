@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private Transform _pointer;
     [SerializeField] private Camera _mainCamera;
 
     public event Action<Cube> OnCubeClicked;
@@ -13,7 +12,7 @@ public class Player : MonoBehaviour
         _mainCamera = Camera.main;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         HandleCubeClickInput();
     }
@@ -29,8 +28,6 @@ public class Player : MonoBehaviour
         {
             if (Physics.Raycast(ray, out RaycastHit targetHit) && targetHit.collider.TryGetComponent(out Cube cube))
             {
-                _pointer.position = targetHit.point;
-
                 OnCubeClicked?.Invoke(cube);
             }
         }

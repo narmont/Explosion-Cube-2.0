@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CubeController : MonoBehaviour
+public class Split : MonoBehaviour
 {
     [SerializeField] private Player _player;
     [SerializeField] private Spawner _spawner;
@@ -23,10 +23,9 @@ public class CubeController : MonoBehaviour
         if (chance <= chanceToSplite)
         {
             _spawner.CreateRedusedCubes(cube, scale, chanceToSplite);
-
-            _exploder.ExplodedSplit();
+            _exploder.ApplyExplosionForce(cube.transform.position);
         }
         
-        Destroy(cube.gameObject);
+        _spawner.Destroy(cube);
     }
 }
