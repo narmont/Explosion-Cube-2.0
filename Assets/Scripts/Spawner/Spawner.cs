@@ -10,7 +10,6 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Cube _prefabCube;
 
     public event Action<Cube> OnCubeCreated;
-    public event Action<Cube> OnCubeDestroyed;
 
     public List<Cube> CreateRedusedCubes(Cube cube, Vector3 scale, float chanceToSplite)
     {
@@ -27,12 +26,6 @@ public class Spawner : MonoBehaviour
         }
 
         return newCubes;
-    }
-
-    public void DestroyCube(Cube cube)
-    {
-        OnCubeDestroyed?.Invoke(cube);
-        Destroy(cube.gameObject);
     }
 
     private void Start()
@@ -59,6 +52,6 @@ public class Spawner : MonoBehaviour
     private void HandleCubeClick(Cube cube)
     {
         cube.OnClicked -= HandleCubeClick;
-        DestroyCube(cube);
+        Destroy(cube.gameObject);
     }
 }
