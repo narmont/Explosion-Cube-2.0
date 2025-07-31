@@ -5,8 +5,6 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private Camera _mainCamera;
 
-    public event Action<Cube> OnCubeClicked;
-
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -28,7 +26,7 @@ public class Player : MonoBehaviour
         {
             if (Physics.Raycast(ray, out RaycastHit targetHit) && targetHit.collider.TryGetComponent(out Cube cube))
             {
-                OnCubeClicked?.Invoke(cube);
+                cube.HandleClick();
             }
         }
     }

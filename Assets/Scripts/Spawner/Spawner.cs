@@ -1,27 +1,37 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private Transform _pointPosition;
     [SerializeField] private Cube _prefabCube;
 
-    public void CreateRedusedCubes(Cube cube, Vector3 scale, float chanceToSplite)
+    public event Action<Cube> OnCubeCreated;
+    public event Action<Cube> OnCubeDestroyed;
+
+    public List<Cube> CreateRedusedCubes(Cube cube, Vector3 scale, float chanceToSplite)
     {
         int minRandomValue = 2;
         int maxRandomValue = 6;
         int countCubes = Random.Range(minRandomValue, maxRandomValue + 1);
+        var newCubes = new List<Cube>();
 
         for (int i = 0; i < countCubes; i++)
         {
-            cube = CreateCube(cube, cube.Position);
-            cube.Init(cube.transform.position, scale, chanceToSplite);
+            var newCube = CreateCube(cube, cube.Position);
+            newCube.Init(cube.transform.position, scale, chanceToSplite);
+            newCubes.Add(newCube);
         }
+
+        return newCubes;
     }
 
-    public void Destroy(Cube cube)
+    public void DestroyCube(Cube cube)
     {
+        OnCubeDestroyed?.Invoke(cube);
         Destroy(cube.gameObject);
     }
 
@@ -40,11 +50,15 @@ public class Spawner : MonoBehaviour
     private Cube CreateCube(Cube cube, Vector3 position)
     {
         Cube newCube = Instantiate(cube, position, Quaternion.identity);
+        newCube.OnClicked += HandleCubeClick;
+
+        OnCubeCreated?.Invoke(newCube);
         return newCube;       
     }
 
-    private void DestroyCube(Cube cube)
+    private void HandleCubeClick(Cube cube)
     {
-        Destroy(cube.gameObject);
+        cube.OnClicked -= HandleCubeClick;
+        DestroyCube(cube);
     }
 }
