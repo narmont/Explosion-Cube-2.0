@@ -7,23 +7,13 @@ public class Exploder : MonoBehaviour
     [SerializeField] private float _explosionForce = 100f;
     [SerializeField] private float _upwardsModifier = 0.4f;
 
-    public void ApplyExplosionToNewCubesOnly(Vector3 explosionCenter, List<Cube> newCubes)
+    public void ApplyExplosionCube(Vector3 explosionCenter, List<Cube> newCubes)
     {
-        foreach (var cube in newCubes)
+        foreach (Cube cube in newCubes)
         {
-            if (cube.TryGetComponent<Rigidbody>(out var rigidbody))
+            if (cube.TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
             {
-                Vector3 direction = rigidbody.position - explosionCenter;
-                float sqrDistance = direction.sqrMagnitude;
-                float sqrRadius = _explosionRadius * _explosionRadius;
-
-                if (sqrDistance <= sqrRadius)
-                {
-                    float distanceFactor = 1f - (sqrDistance / sqrRadius);
-                    float sizeFactor = 1f / Mathf.Max(0.1f, cube.transform.localScale.magnitude);
-                    float force = _explosionForce * distanceFactor * sizeFactor;
-                    rigidbody.AddExplosionForce(force, explosionCenter, _explosionRadius, _upwardsModifier, ForceMode.Impulse);
-                }
+                rigidbody.AddExplosionForce(_explosionForce, explosionCenter, _explosionRadius);
             }
         }
     }

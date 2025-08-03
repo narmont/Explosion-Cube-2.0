@@ -51,7 +51,7 @@ public class Spawner : MonoBehaviour
 
     private void HandleCubeClick(Cube cube)
     {
-        cube.OnClicked -= HandleCubeClick;
+         cube.OnClicked -= HandleCubeClick;
         Destroy(cube.gameObject);
     }
 }
