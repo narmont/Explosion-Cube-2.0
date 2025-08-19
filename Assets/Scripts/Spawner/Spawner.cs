@@ -1,17 +1,24 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private Transform _pointPosition;
     [SerializeField] private Cube _prefabCube;
+    [SerializeField] private Exploder _exploder;
+    [SerializeField] private int _divisionScale = 2;
+    [SerializeField] private int _divisionChanceSplit = 2;
 
     public event Action<Cube> OnCubeCreated;
 
-    public List<Cube> CreateRedusedCubes(Cube cube, Vector3 scale, float chanceToSplite)
+    private void Start()
+    {
+        CreateInitialCubes();
+    }
+
+    private List<Cube> CreateRedusedCubes(Cube cube, Vector3 scale, float chanceToSplite)
     {
         int minRandomValue = 2;
         int maxRandomValue = 6;
@@ -26,11 +33,6 @@ public class Spawner : MonoBehaviour
         }
 
         return newCubes;
-    }
-
-    private void Start()
-    {
-        CreateInitialCubes();
     }
 
     private void CreateInitialCubes()
@@ -51,7 +53,21 @@ public class Spawner : MonoBehaviour
 
     private void HandleCubeClick(Cube cube)
     {
-         cube.OnClicked -= HandleCubeClick;
+        Vector3 cubePosition = cube.transform.position;
+
+        cube.OnClicked -= HandleCubeClick;
+
+        if (cube.ShouldSplit())
+        {
+            cube.GetSplitParameters(_divisionScale, _divisionChanceSplit, out Vector3 scale, out float chanceToSplite);
+            var newCubes = CreateRedusedCubes(cube, scale, chanceToSplite);
+            _exploder.ApplyExplosionCube(cubePosition, newCubes);
+        }
+        else
+        {      
+            _exploder.ApplyExplosionAll(cubePosition);
+        }
+
         Destroy(cube.gameObject);
     }
 }

@@ -1,14 +1,9 @@
+using System;
 using UnityEngine;
 
-[RequireComponent(typeof(RaycastInteractor))]
 public class InputReader : MonoBehaviour
 {
-    private RaycastInteractor _raycastHandler;
-
-    private void Awake()
-    {
-        _raycastHandler = GetComponent<RaycastInteractor>();
-    }
+    public event Action<Vector2> OnClicked;
 
     private void Update()
     {
@@ -21,7 +16,7 @@ public class InputReader : MonoBehaviour
 
         if (Input.GetMouseButtonDown(leftMouseButton))
         {
-            _raycastHandler.CastFromMainCamera();
+            OnClicked?.Invoke(Input.mousePosition);
         }
     }
 }

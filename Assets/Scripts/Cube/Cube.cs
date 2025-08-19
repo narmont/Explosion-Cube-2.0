@@ -5,16 +5,18 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(CubeColorChanger))]
 public class Cube : MonoBehaviour
 {
+    private float _chanceToSplit = 100;
+
     public event Action<Cube> OnClicked;
+
     public Vector3 Position => transform.position;
     public Vector3 Scale => transform.localScale;
-    private float _chanceToSplite = 100;
 
     public void Init(Vector3 position, Vector3 scale, float chanceToSplit)
     {
         transform.position = position;
         transform.localScale = scale;
-        _chanceToSplite = chanceToSplit;
+        _chanceToSplit = chanceToSplit;
     }
 
     public bool ShouldSplit()
@@ -23,19 +25,14 @@ public class Cube : MonoBehaviour
         float maximumChance = 100f;
         float chance = Random.Range(minimumChance, maximumChance + 1);
         
-        return chance <= _chanceToSplite;
+        return chance <= _chanceToSplit;
     }
 
-    public (Vector3 scale, float newChance) GetSplitParameters(int divisionScale, int divisionChance)
+    public void GetSplitParameters(int divisionScale, int divisionChance, out Vector3 newScale, out float newChance)
     {
-        Vector3 newScale = transform.localScale / divisionScale;
-        float newChance = _chanceToSplite / divisionChance;
-        
-        return (newScale, newChance);
+        newScale = transform.localScale / divisionScale;
+        newChance = _chanceToSplit / divisionChance;
     }
 
-    public void HandleClick()
-    {
-        OnClicked?.Invoke(this);
-    }
+    public void HandleClick() => OnClicked?.Invoke(this);
 }

@@ -6,25 +6,30 @@ public class Exploder : MonoBehaviour
     [SerializeField] private float _explosionRadius = 40f;
     [SerializeField] private float _explosionForce = 100f;
     [SerializeField] private float _upwardsModifier = 0.4f;
+    [SerializeField] private int _maxColliders = 32;
 
     public void ApplyExplosionCube(Vector3 explosionCenter, List<Cube> newCubes)
     {
         foreach (Cube cube in newCubes)
         {
-            if (cube.TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+            if (cube != null && cube.TryGetComponent(out Rigidbody rigidbody))
             {
                 rigidbody.AddExplosionForce(_explosionForce, explosionCenter, _explosionRadius);
             }
         }
     }
 
-    public void ApplyExplosionToAll(Vector3 explosionCenter)
+    public void ApplyExplosionAll(Vector3 explosionCenter)
     {
-        Collider[] overlappedColliders = Physics.OverlapSphere(explosionCenter, _explosionRadius);
+        Collider[] _colliders = new Collider[_maxColliders];
 
-        foreach (var hit in overlappedColliders)
+        int count = Physics.OverlapSphereNonAlloc(explosionCenter, _explosionRadius, _colliders);
+
+        for (int i = 0; i < count; i++)
         {
-            if (hit.TryGetComponent<Rigidbody>(out var rigidbody))
+            Collider collider = _colliders[i];
+
+            if (collider != null && collider.TryGetComponent(out Rigidbody rigidbody))
             {
                 Vector3 direction = rigidbody.position - explosionCenter;
                 float sqrDistance = direction.sqrMagnitude;
@@ -33,7 +38,7 @@ public class Exploder : MonoBehaviour
                 if (sqrDistance <= sqrRadius)
                 {
                     float distanceFactor = 1f - (sqrDistance / sqrRadius);
-                    float sizeFactor = 1f / Mathf.Max(0.1f, hit.bounds.size.magnitude);
+                    float sizeFactor = 1f / Mathf.Max(0.1f, collider.bounds.size.magnitude);
                     float force = _explosionForce * distanceFactor * sizeFactor;
                     rigidbody.AddExplosionForce(force, explosionCenter, _explosionRadius, _upwardsModifier, ForceMode.Impulse);
                 }
